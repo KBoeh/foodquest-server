@@ -7,23 +7,24 @@ require('dotenv').config();
 const app = express();
 app.use(cors())
 
-//PORT = "/" (which is the path for .get())
 app.get('/', (req, res) =>{
   res.json('hi')
 });
 
 app.get('/food', async (req, res) =>{
   const passedQuery = req.query.q
+  //checks request passed from frontend for multiple health parameters and concats them
   const passedHealth = () => {
-    const param = req.query.health;
-    let array = [];
-    if(!param) {return ''}
-    if(typeof param === 'string') {return '&health=' + param}
-    if(Array.isArray(param)) {
-      for(let x of param) {
-        array.push('&health=' + x)
+    const passedParam = req.query.health;
+    let concatParams = [];
+    if(!passedParam) {return ''}
+    //if only one param is passed it will be a string,  more than one = array
+    if(typeof passedParam === 'string') {return '&health=' + passedParam}
+    if(Array.isArray(passedParam)) {
+      for(let x of passedParam) {
+        concatParams.push('&health=' + x)
       } 
-      return array.join('');
+      return concatParams.join('');
     }
   };
 
